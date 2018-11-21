@@ -12,7 +12,7 @@ public interface UrlService {
 	URL findByUrlId(Long id);
 	List<URL> findByProjectId(Long projectId);
 	Long getMaxId();
-	String getResponse(Long projectId, String path, Long code, String method);
+	URL getUrl(Long projectId, String path, int code, String method);
 
 
 }

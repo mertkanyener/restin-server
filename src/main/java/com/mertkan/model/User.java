@@ -1,7 +1,6 @@
 package com.mertkan.model;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,6 +73,10 @@ public class User implements UserDetails{
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	public String extractPassword() {
+		return password;
+	}
+	
 	public String getPassword() {
 		 return password;
 	}

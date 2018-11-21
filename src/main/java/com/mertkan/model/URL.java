@@ -21,14 +21,42 @@ public class URL {
 	@Lob
 	private String response;
 	@Column(name = "responseCode")
-	private Long responseCode; 
+	private int responseCode; 
 	@Column(name = "method", nullable = false)
 	private String method;
+	@Column(name = "contentType")
+	private String contentType;
+	@Column(name= "isDynamic")
+	private int isDynamic;
 	@Column(name = "is_protected", nullable = false)
 	private boolean isProtected;
 	
+	public URL() {}
+	
+	public URL(Long id, Long projectId, String path, String response, int responseCode, String method, String contentType,
+			boolean isProtected, int isDynamic) {
+		super();
+		this.id = id;
+		this.projectId = projectId;
+		this.path = path;
+		this.response = response;
+		this.responseCode = responseCode;
+		this.method = method;
+		this.isProtected = isProtected;
+		this.isDynamic = isDynamic;
+		this.contentType = contentType;
+		
+	}
 	
 	//Getters and setters
+	
+	public int getIsDynamic() {
+		return isDynamic;
+	}
+
+	public void setIsDynamic(int isDynamic) {
+		this.isDynamic = isDynamic;
+	}
 	
 	public boolean isProtected() {
 		return isProtected;
@@ -66,11 +94,20 @@ public class URL {
 	public void setMethod(String method) {
 		this.method = method;
 	}
-	public Long getResponseCode() {
+	public int getResponseCode() {
 		return responseCode;
 	}
-	public void setResponseCode(Long responseCode) {
+	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 	}
+	public String getContentType() {
+		return contentType;
+	}
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	
+	
 	
 }

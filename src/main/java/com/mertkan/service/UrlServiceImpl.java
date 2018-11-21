@@ -1,6 +1,7 @@
 package com.mertkan.service;
 
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,14 @@ public class UrlServiceImpl implements UrlService {
 	
 	@Override
 	public List<URL> findByProjectId(Long projectId) {
-		return urlRepository.findByProjectId(projectId);
+		List<URL> urls = urlRepository.findByProjectId(projectId);
+		urls.sort(Comparator.comparing(URL:: getId));
+		return urls; 
 	}
 
 	@Override
 	public void delete(Long id) {
 		urlRepository.deleteById(id);
-		
 	}
 
 	@Override
@@ -47,8 +49,8 @@ public class UrlServiceImpl implements UrlService {
 	}
 	
 	@Override
-	public String getResponse(Long projectId, String path, Long code, String method) {
-		return urlRepository.getResponse(projectId, path, code, method);
+	public URL getUrl(Long projectId, String path, int code, String method) {
+		return urlRepository.getUrl(projectId, path, code, method);
 	}
 
 

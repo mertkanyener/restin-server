@@ -9,6 +9,11 @@ import javax.persistence.Table;
 @Table(name= "Project")
 public class Project {
 	
+	@Override
+	public String toString() {
+		return "Project [id=" + id + ", userId=" + userId + ", name=" + name + ", description=" + description
+				+ ", status=" + status + "]";
+	}
 	@Id
 	private Long id;
 	@Column(name = "user_id", nullable = false)
@@ -19,6 +24,16 @@ public class Project {
 	private String description;
 	@Column(name = "status")
 	private String status;
+	
+	public Project() {}
+	
+	public Project(Long id, Long userId, String name, String description, String status) {
+		this.id = id;
+		this.userId = userId;
+		this.name = name;
+		this.description = description;
+		this.status = status;
+	}
 	
 	public Long getId() {
 		return id;
@@ -50,6 +65,8 @@ public class Project {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	
 	
 	
 

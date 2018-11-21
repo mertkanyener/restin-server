@@ -1,5 +1,6 @@
 package com.mertkan.service;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +37,16 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public List<Project> getAll() {
-		return projectRepository.findAll();
+		List<Project> projects = projectRepository.findAll();
+		projects.sort(Comparator.comparing(Project::getId));
+		return projects;
 	}
 	
 	@Override
 	public List<Project> getProjects(Long userId) {
-		return projectRepository.getProjects(userId);
+		List<Project> projects = projectRepository.getProjects(userId);
+		projects.sort(Comparator.comparing(Project::getId));
+		return projects;
 	}
 	
 	@Override

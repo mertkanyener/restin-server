@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -22,17 +23,28 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 @Configuration
 @EnableAuthorizationServer
-@Import(SecurityConfiguration.class)
 public class OAuth2Configuration  implements AuthorizationServerConfigurer{
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	@Qualifier("userDetailsServiceBean")
+	UserDetailsService userDetailsService;
+	
+	@Autowired
+	DataSource dataSource;
+	
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-		security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").allowFormAuthenticationForClients();
+		security
+			.tokenKeyAccess("permitAll()")
+			.checkTokenAccess("isAuthenticated()")
+			.allowFormAuthenticationForClients()
+			.passwordEncoder(passwordEncoder);
 	}
-
-	@Autowired
-	private DataSource dataSource;
-
+	
 	@Bean
 	public TokenStore tokenStore() {
 		return new JdbcTokenStore(dataSource);
@@ -52,13 +64,14 @@ public class OAuth2Configuration  implements AuthorizationServerConfigurer{
 		endpoints
 			.tokenStore(tokenStore())
 			.tokenEnhancer(tokenEnhancer())
-			.authenticationManager(authenticationManager);
+			.authenticationManager(authenticationManager)
+			.userDetailsService(userDetailsService);
 			
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.jdbc(dataSource);
+		clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
 	}
 	
 	@Bean
