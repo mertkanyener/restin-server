@@ -47,22 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.userDetailsService(userDetailsServiceBean())
 			.passwordEncoder(passwordEncoder);
 	}
-	
-	/*
-	
-	@Bean
-	public ObjectPostProcessor<Object> objectPostProcessor() throws Exception {
-		return objectPostProcessor();		
-	}
-	*/
-	
-	
-	/**
-	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/admin/**", "/register**");
-	}
-	**/
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -78,17 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated();
 			
 	}
-	
-//	@Override
-//	protected void configure(HttpSecurity http) throws Exception {
-//		http
-//			.antMatcher("/**")
-//			.authorizeRequests()
-//				.antMatchers("/**")
-//				.permitAll();
-//	}
-//
-//	
+
 
 	
 }

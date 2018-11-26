@@ -21,9 +21,8 @@ import com.mertkan.service.ResponseService;
 import com.mertkan.service.UrlService;
 
 
-
 @RestController
-@RequestMapping(path="/admin")
+@RequestMapping("/resources")
 public class ProjectController {
 	
 	@Autowired
