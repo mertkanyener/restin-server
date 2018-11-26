@@ -24,7 +24,9 @@ public class Project {
 	private String description;
 	@Column(name = "status")
 	private String status;
-	
+//	@Column(name = "page")
+//	private int page;
+//
 	public Project() {}
 	
 	public Project(Long id, Long userId, String name, String description, String status) {
@@ -65,9 +67,18 @@ public class Project {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
-	
-	
+
+//	public int getPage() {
+//		return page;
+//	}
+//
+//	public void setPage(int page) {
+//		this.page = page;
+//	}
+
+
+
+
+
 
 }

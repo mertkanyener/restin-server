@@ -41,9 +41,9 @@ public class UrlServiceTest {
 	@Before
 	public void setUp() {
 		List<URL> testList = new ArrayList<URL>();
-		URL test1 = new URL(5l, 3l, "some/path", "{response}", 200, "GET", "application/json", true, 0);
-		URL test2 = new URL(6l, 3l, "some/path/path", "{response}", 200, "POST", "application/json", true, 0);
-		URL test3 = new URL(7l, 3l, "some/path/someother", "{response}", 200, "PUT", "application/json", true, 0);
+		URL test1 = new URL(5l, 3l, "some/path", "{response}", 200, "GET", "application/json", 0, 0);
+		URL test2 = new URL(6l, 3l, "some/path/path", "{response}", 200, "POST", "application/json", 0, 0);
+		URL test3 = new URL(7l, 3l, "some/path/someother", "{response}", 200, "PUT", "application/json", 0, 0);
 		testList.add(test1);
 		testList.add(test2);
 		testList.add(test3);
@@ -77,7 +77,7 @@ public class UrlServiceTest {
 		String path = "some/path/someother";
 		String method = "PUT";
 		
-		URL test3 = new URL(7l, 3l, "some/path/someother", "{response}", 200,"application/json", "PUT", true, 0);
+		URL test3 = new URL(7l, 3l, "some/path/someother", "{response}", 200,"application/json", "PUT", 0, 0);
 		
 		URL found = urlService.getUrl(projectId, path, responseCode, method);
 		assertThat(found.getResponse(), Matchers.<String>is(test3.getResponse()));

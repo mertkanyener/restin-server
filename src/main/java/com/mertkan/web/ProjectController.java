@@ -30,6 +30,7 @@ import com.mertkan.service.ResponseService;
 import com.mertkan.service.UrlService;
 
 
+
 @RestController
 @RequestMapping(path="/admin")
 public class ProjectController {
@@ -51,14 +52,17 @@ public class ProjectController {
 	public Long getMaxProjectId() {
 		return projectService.getMaxId();
 	}
+
 	@GetMapping(path = "/projects/all")
 	public List<Project> getAllProjects() {
 		return projectService.getAll();
 	}
+
 	@GetMapping(path = "/projects")
 	public List<Project> getProjects(@RequestHeader(value="UserId") Long id) {
 		return projectService.getProjects(id);
 	}
+
 	@DeleteMapping(path = "/projects/{id}")
 	public void deleteProject(@PathVariable Long id) {
 		projectService.delete(id);
@@ -143,39 +147,4 @@ public class ProjectController {
 		responseHeaders.setContentType(contentType);
 		return new ResponseEntity<String>(response, responseHeaders, responseService.getStatus(url.getResponseCode()));
 	}
-	
-	
-	
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

@@ -1,5 +1,4 @@
 package com.mertkan.test;
-/*
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -188,7 +187,7 @@ public class ControllerTest {
     
     @Test
     public void whenGetMaxUrlId_thenReturnMaxId() throws Exception {
-    	URL test = new URL(555l, 3l, "some/path", "{response}", 200,"application/json", "GET", true, 0);
+    	URL test = new URL(5l, 3l, "some/path", "{response}", 200, "GET", "application/json", 0, 0);
     	
     	when(urlService.getMaxId()).thenReturn(test.getId());
     	
@@ -215,7 +214,7 @@ public class ControllerTest {
     
     @Test
     public void givenUrlWhenPostUrl_thenResponseShouldBeOk() throws Exception {
-    	URL test = new URL(5l, 3l, "some/path", "{response}", 200,"application/json", "GET", true, 0);
+    	URL test = new URL(5l, 3l, "some/path", "{response}", 200, "GET", "application/json", 0, 0);
     	
     	ObjectWriter ow = new ObjectMapper().writer();
 		String reqBody = ow.writeValueAsString(test);
@@ -230,7 +229,7 @@ public class ControllerTest {
     
     @Test
     public void givenIdWhenGetUrl_thenReturnJson() throws Exception {
-    	URL test = new URL(5l, 3l, "some/path", "{response}", 200, "application/json", "GET", true, 0);
+    	URL test = new URL(5l, 3l, "some/path", "{response}", 200, "GET", "application/json", 0, 0);
     	
     	ObjectWriter ow = new ObjectMapper().writer();
 		String expectedJson = ow.writeValueAsString(test);
@@ -245,7 +244,7 @@ public class ControllerTest {
     
     @Test
     public void givenUrlWhenUpdateUrl_thenResponseShouldBeOk() throws Exception {
-    	URL test = new URL(5l, 3l, "some/path", "{response}", 200, "application/json", "GET", true, 0);
+    	URL test = new URL(5l, 3l, "some/path", "{response}", 200, "application/json", "GET", 0, 0);
     	
     	ObjectWriter ow = new ObjectMapper().writer();
 		String reqBody = ow.writeValueAsString(test);
@@ -266,26 +265,6 @@ public class ControllerTest {
     			.header("Authorization", "Bearer " + getAccessToken()))
     	.andExpect(status().isOk());
     }
-   
-    @Test
-    public void givenFullPathWhenGetResponse_thenReturnJsonResponse() throws Exception{
-    	Project testPro = new Project(10l, 3l, "mertProject", "desc1", "active");
-    	URL test = new URL(5l, 3l, "some/path", "{response}", 200l, "GET", true);
-    	
-    	ObjectWriter ow = new ObjectMapper().writer();
-		String expectedResponse = ow.writeValueAsString(test.getResponse());
-		
-		when(urlService.getResponse(test.getProjectId(), test.getPath(), test.getResponseCode(), test.getMethod()))
-		.thenReturn(test.getResponse());
-		
-		mvc.perform(get("/admin/" + testPro.getName() + "/" + test.getPath())
-				.header("Authorization", "Bearer " + getAccessToken()))
-		.andExpect(status().isOk())
-		.andExpect(content().string(expectedResponse));
-		
-		
-    }
-    
     
     
     private List<Project> createTestProjects() {
@@ -308,10 +287,10 @@ public class ControllerTest {
     	
     	List<URL> testList = new ArrayList<URL>();
     	
-    	URL test1 = new URL(5l, 3l, "some/path", "{response}", 200, "application/json", "GET", true, 0);
-		URL test2 = new URL(6l, 3l, "some/path", "{response}", 200, "application/json", "GET", true, 0);
-		URL test3 = new URL(7l, 3l, "some/path", "{response}", 200, "application/json", "GET", true, 0);
-		
+    	URL test1 = new URL(5l, 3l, "some/path", "{response}", 200, "GET", "application/json", 0, 0);
+		URL test2 = new URL(6l, 3l, "some/path", "{response}", 200, "GET", "application/json", 0, 0);
+		URL test3 = new URL(7l, 3l, "some/path", "{response}", 200, "GET", "application/json", 0, 0);
+
 		testList.add(test1);
 		testList.add(test2);
 		testList.add(test3);
@@ -342,4 +321,3 @@ public class ControllerTest {
         public String accessToken;
     }
 }
-*/

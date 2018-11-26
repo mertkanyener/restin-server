@@ -29,12 +29,12 @@ public class URL {
 	@Column(name= "isDynamic")
 	private int isDynamic;
 	@Column(name = "is_protected", nullable = false)
-	private boolean isProtected;
+	private int isProtected;
 	
 	public URL() {}
 	
 	public URL(Long id, Long projectId, String path, String response, int responseCode, String method, String contentType,
-			boolean isProtected, int isDynamic) {
+			int isProtected, int isDynamic) {
 		super();
 		this.id = id;
 		this.projectId = projectId;
@@ -58,10 +58,10 @@ public class URL {
 		this.isDynamic = isDynamic;
 	}
 	
-	public boolean isProtected() {
+	public int isProtected() {
 		return isProtected;
 	}
-	public void setProtected(boolean isProtected) {
+	public void setProtected(int isProtected) {
 		this.isProtected = isProtected;
 	}
 	public Long getId() {
