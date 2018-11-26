@@ -20,7 +20,6 @@ import com.mertkan.model.User;
 import com.mertkan.repository.RoleRepository;
 import com.mertkan.service.UserService;
 
-@CrossOrigin(origins = "*")
 @RestController
 public class UserController {
 	
