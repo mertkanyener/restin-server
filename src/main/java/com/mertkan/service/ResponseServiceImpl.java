@@ -1,15 +1,29 @@
 package com.mertkan.service;
 
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
+import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
 import com.github.javafaker.Faker;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 @Service
 public class ResponseServiceImpl implements ResponseService {
@@ -18,7 +32,7 @@ public class ResponseServiceImpl implements ResponseService {
 	
 	@Override
 	public String getDynamicResponse(String response) {
-		Pattern pattern = Pattern.compile("\"\\$\\w*\\.\\w*\"");
+		Pattern pattern = Pattern.compile("\"\\$\\{\\w*\\.\\w*}\"");
 		Matcher matcher = pattern.matcher(response);
 		List<String> matches =  new ArrayList<String>();
 		while(matcher.find()) {
@@ -32,10 +46,47 @@ public class ResponseServiceImpl implements ResponseService {
 	}
 
 	@Override
+	public String prettyPrintXML(String xml){
+		try {
+			xml = "<response>"+xml+"</response>";
+			DocumentBuilder db;
+			db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document doc = db.parse(new InputSource(new StringReader(xml)));
+
+			OutputFormat format = new OutputFormat(doc);
+			format.setIndenting(true);
+			format.setIndent(2);
+			format.setOmitXMLDeclaration(true);
+
+			format.setLineWidth(Integer.MAX_VALUE);
+			Writer outxml = new StringWriter();
+			XMLSerializer serializer = new XMLSerializer(outxml, format);
+			serializer.serialize(doc);
+
+			return outxml.toString();
+		} catch (Exception e){
+			System.out.println(e);
+			System.exit(1);
+			return null;
+		}
+
+	}
+
+	@Override
+	public String prettyPrintJSON(String json){
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		JsonParser jp = new JsonParser();
+		JsonElement je = jp.parse(json);
+		String prettyJson = gson.toJson(je);
+
+		return prettyJson;
+	}
+
+	@Override
 	public String fakerValue(String pattern) {
 		String[] split = pattern.split("\\.");
-		String category = split[0].substring(2);
-		String subCategory = split[1].substring(0, split[1].length()-1).replace("-", "");
+		String category = split[0].substring(3);
+		String subCategory = split[1].substring(0, split[1].length()-2).replace("-", "");
 		String result = "";
 		
 		switch(category) {
@@ -580,16 +631,21 @@ public class ResponseServiceImpl implements ResponseService {
 		}
 		return result;
 	};
-	
+
+	@Override
+	public String getMirroredResponse(String response){
+		return null;
+	}
+
 	@Override
 	public MediaType getMIME(String contentType) {
 		MediaType result = null;
-		if (contentType.equals("application/json")) {
-			result = MediaType.APPLICATION_JSON;
+		if (contentType.equals("text/plain")) {
+			result = MediaType.TEXT_PLAIN;
 		} else if (contentType.equals("application/xml") ) {
 			result = MediaType.APPLICATION_XML;
 		} else {
-			result = MediaType.TEXT_PLAIN;
+			result = MediaType.APPLICATION_JSON;
 		}
 		return result;
 	}

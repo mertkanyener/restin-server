@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.AntPathMatcher;
@@ -22,7 +23,7 @@ import com.mertkan.service.UrlService;
 
 
 @RestController
-@RequestMapping("/resources")
+@RequestMapping(path = "/resources")
 public class ProjectController {
 	
 	@Autowired
@@ -104,37 +105,57 @@ public class ProjectController {
 	public void deleteUrl(@PathVariable Long projectId, @PathVariable Long id) {
 		urlService.delete(id);
 	}
-	
+
 	@RequestMapping(path = "/{projectName}/{path}/**", method= {RequestMethod.GET, RequestMethod.DELETE, RequestMethod.OPTIONS, RequestMethod.PATCH,
 																RequestMethod.POST, RequestMethod.PUT, RequestMethod.TRACE, RequestMethod.HEAD})
-	public ResponseEntity<String> getResponse(@PathVariable String projectName, @PathVariable String path, 
+	public ResponseEntity<String> getResponse(@PathVariable String projectName, @PathVariable String path,
 							  @RequestHeader(value="UserId") Long userId, @RequestHeader(value="Code") int code,
 							  HttpServletRequest req) {
-		final String reqPath = 
-				req.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE).toString();
-		final String bestMatchingPattern = 
-				req.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString();
-		String rest = new AntPathMatcher().extractPathWithinPattern(bestMatchingPattern, reqPath); // determining the pattern-mapped part of URL
-	    String output;
-	    if (null != rest && !rest.isEmpty()) {
-	        output = path + '/' + rest;
-	    } else {
-	        output = path;
-	    }
-		Long projectId = projectService.findByProjectName(userId, projectName).getId();
-		URL url = urlService.getUrl(projectId, output, code, req.getMethod());
-		String response = url.getResponse();
-		if (url.getIsDynamic() == 1) {
-			response = responseService.getDynamicResponse(response);
+		Project project = projectService.findByProjectName(userId, projectName);
+		if (project.getStatus().toLowerCase().equals("active")){
+			final String reqPath =
+					req.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE).toString();
+			final String bestMatchingPattern =
+					req.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString();
+			String rest = new AntPathMatcher().extractPathWithinPattern(bestMatchingPattern, reqPath); // determining the pattern-mapped part of URL
+			String output;
+			if (null != rest && !rest.isEmpty()) {
+				output = path + '/' + rest;
+			} else {
+				output = path;
+			}
+			Long projectId = project.getId();
+			URL url = urlService.getUrl(projectId, output, code, req.getMethod());
+			String response = url.getResponse();
+			if (url.getIsDynamic() == 1) {
+				response = responseService.getDynamicResponse(response);
+			}
+			HttpHeaders responseHeaders = new HttpHeaders();
+			System.out.println("Content type: " + req.getContentType());
+			MediaType contentType = responseService.getMIME(req.getContentType());
+			if (contentType.equals(MediaType.APPLICATION_XML)) {
+				JSONObject jsonResponse = new JSONObject(response);
+				response = XML.toString(jsonResponse);
+				response = responseService.prettyPrintXML(response);
+			} else if (contentType.equals(MediaType.APPLICATION_JSON)) {
+				response = responseService.prettyPrintJSON(response);
+			}
+			responseHeaders.setContentType(contentType);
+			response = response.trim();
+
+			return new ResponseEntity<String>(response, responseHeaders, responseService.getStatus(url.getResponseCode()));
+
+		}else{
+			return ResponseEntity
+					.status(HttpStatus.NOT_FOUND)
+					.body("Project is inactive!");
 		}
-		HttpHeaders responseHeaders = new HttpHeaders();
-		MediaType contentType = responseService.getMIME(url.getContentType());
-		if (contentType.equals(MediaType.APPLICATION_XML)) {
-			JSONObject jsonResponse = new JSONObject(response);
-			response = XML.toString(jsonResponse);
-		}
-		System.out.println(contentType);
-		responseHeaders.setContentType(contentType);
-		return new ResponseEntity<String>(response, responseHeaders, responseService.getStatus(url.getResponseCode()));
+
 	}
+
+	@GetMapping(path = "/check_token")
+	public int isAuthenticated(){
+		return 1;
+	}
+
 }

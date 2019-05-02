@@ -6,11 +6,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="register-login" />
+        <module name="restin-server" />
+        <module name="rustin-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="register-login" target="1.8" />
+      <module name="restin-server" target="1.8" />
+      <module name="rustin-server" target="1.8" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="restin-server" options="-parameters" />
+      <module name="rustin-server" options="-parameters" />
+    </option>
   </component>
 </project>

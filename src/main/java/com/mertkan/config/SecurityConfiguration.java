@@ -22,8 +22,8 @@ import com.mertkan.service.UserDetailsServiceImpl;
 @Order(100)
 @Import(Encoder.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
-	
+
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -50,16 +50,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		http.headers().frameOptions().sameOrigin();
 		http
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/register").permitAll()
-			.antMatchers("/oauth/token").permitAll()
-			.antMatchers("/oauth/revoke-token").permitAll()
-			.antMatchers("/validation/**").permitAll()
+			.antMatchers("/**").permitAll()
 			.anyRequest().authenticated();
 			
 	}

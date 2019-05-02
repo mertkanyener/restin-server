@@ -24,17 +24,14 @@ public class URL {
 	private int responseCode; 
 	@Column(name = "method", nullable = false)
 	private String method;
-	@Column(name = "contentType")
-	private String contentType;
 	@Column(name= "isDynamic")
 	private int isDynamic;
-	@Column(name = "is_protected", nullable = false)
-	private int isProtected;
+	@Column(name = "is_mirrored", nullable = false)
+	private int isMirrored;
 	
 	public URL() {}
 	
-	public URL(Long id, Long projectId, String path, String response, int responseCode, String method, String contentType,
-			int isProtected, int isDynamic) {
+	public URL(Long id, Long projectId, String path, String response, int responseCode, String method, int isMirrored, int isDynamic) {
 		super();
 		this.id = id;
 		this.projectId = projectId;
@@ -42,10 +39,9 @@ public class URL {
 		this.response = response;
 		this.responseCode = responseCode;
 		this.method = method;
-		this.isProtected = isProtected;
+		this.isMirrored = isMirrored;
 		this.isDynamic = isDynamic;
-		this.contentType = contentType;
-		
+
 	}
 	
 	//Getters and setters
@@ -58,11 +54,11 @@ public class URL {
 		this.isDynamic = isDynamic;
 	}
 	
-	public int isProtected() {
-		return isProtected;
+	public int isMirrored() {
+		return isMirrored;
 	}
-	public void setProtected(int isProtected) {
-		this.isProtected = isProtected;
+	public void setMirrored(int isMirrored) {
+		this.isMirrored = isMirrored;
 	}
 	public Long getId() {
 		return id;
@@ -100,14 +96,6 @@ public class URL {
 	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 	}
-	public String getContentType() {
-		return contentType;
-	}
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
-	
 	
 	
 }

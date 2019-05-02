@@ -29,21 +29,21 @@ public class UrlRepoTest {
 	
 	@Test
 	public void whenFindByUrlId_thenReturnUrl() {
-		URL test = new URL(5l, 2l, "some/path", "{response}", 200, "GET", "application/json", 0, 0);
+		URL test = new URL(95l, 2l, "some/path", "{response}", 200, "GET", 0, 0);
 		
 		entityManager.persist(test);
 		entityManager.flush();
 		
-		URL found = urlRepository.findByUrlId(5l);
+		URL found = urlRepository.findByUrlId(95l);
 		assertThat(found, Matchers.<URL>is(test));
 	}
 	
 	@Test
 	public void whenFindByProjectId_thenReturnUrl() {
 		List<URL> testList = new ArrayList<URL>();
-		URL test1 = new URL(5l, 3l, "some/path", "{response}", 200, "GET","application/json", 0, 0);
-		URL test2 = new URL(6l, 3l, "some/path", "{response}", 200, "GET","application/json", 0, 0);
-		URL test3 = new URL(7l, 3l, "some/path", "{response}", 200, "GET","application/json", 0, 0);
+		URL test1 = new URL(95l, 303l, "some/path", "{response}", 200, "GET", 0, 0);
+		URL test2 = new URL(96l, 303l, "some/path", "{response}", 200, "GET", 0, 0);
+		URL test3 = new URL(97l, 303l, "some/path", "{response}", 200, "GET", 0, 0);
 		
 		entityManager.persist(test1);
 		entityManager.persist(test2);
@@ -54,7 +54,7 @@ public class UrlRepoTest {
 		testList.add(test2);
 		testList.add(test3);
 		
-		List<URL> foundList = urlRepository.findByProjectId(3l);
+		List<URL> foundList = urlRepository.findByProjectId(303l);
 		
 		foundList.sort(Comparator.comparing(URL::getId));
 		testList.sort(Comparator.comparing(URL::getId));
@@ -64,9 +64,9 @@ public class UrlRepoTest {
 	
 	@Test
 	public void whenMaxId_thenReturnMaxId() {
-		URL test1 = new URL(5l, 3l, "some/path", "{response}", 200, "GET","application/json", 0, 0);
-		URL test2 = new URL(6l, 3l, "some/path", "{response}", 200, "GET","application/json", 0, 0);
-		URL test3 = new URL(777l, 3l, "some/path", "{response}", 200, "GET","application/json", 0, 0);
+		URL test1 = new URL(95l, 3l, "some/path", "{response}", 200, "GET", 0, 0);
+		URL test2 = new URL(96l, 3l, "some/path", "{response}", 200, "GET", 0, 0);
+		URL test3 = new URL(777l, 3l, "some/path", "{response}", 200, "GET", 0, 0);
 		
 		entityManager.persist(test1);
 		entityManager.persist(test2);
@@ -81,7 +81,7 @@ public class UrlRepoTest {
 	
 	@Test
 	public void whenGetResponse_thenReturnResponse() {
-		URL test = new URL(6l, 3l, "some/path", "{response}", 200, "GET","application/json", 0, 0);
+		URL test = new URL(96l, 3l, "some/path", "{response}", 200, "GET", 0, 0);
 		
 		entityManager.persist(test);
 		entityManager.flush();

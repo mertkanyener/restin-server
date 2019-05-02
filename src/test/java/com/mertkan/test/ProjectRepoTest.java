@@ -29,7 +29,7 @@ public class ProjectRepoTest {
 	
 	@Test
 	public void whenFindByProjectId_thenReturnProject() {
-		Project test = new Project(64l, 1l, "test", "something", "active");
+		Project test = new Project(964l, 1l, "test", "something", "active");
 		entityManager.persist(test);
 		entityManager.flush();
 		
@@ -42,10 +42,10 @@ public class ProjectRepoTest {
 	public void whenGetProjects_thenReturnProjects() {
 		List<Project> testList = new ArrayList<Project>();
 		
-		Project test1 = new Project(10l, 2l, "test1", "desc1", "active"); 
-		Project test2 = new Project(11l, 2l, "test2", "desc2", "active"); 
-		Project test3 = new Project(12l, 2l, "test3", "desc3", "passive"); 
-		Project test4 = new Project(13l, 2l, "test4", "desc4", "pending"); 
+		Project test1 = new Project(901l, 2l, "test1", "desc1", "active");
+		Project test2 = new Project(911l, 2l, "test2", "desc2", "active");
+		Project test3 = new Project(912l, 2l, "test3", "desc3", "passive");
+		Project test4 = new Project(913l, 2l, "test4", "desc4", "pending");
 		
 		testList.add(test1);
 		testList.add(test2);
@@ -59,7 +59,8 @@ public class ProjectRepoTest {
 		entityManager.flush();
 	
 		List<Project> foundList = projectRepository.getProjects(2l);
-		
+
+		foundList.sort(Comparator.comparing(Project::getId));
 		testList.sort(Comparator.comparing(Project::getId));
 		
 		assertThat(foundList, Matchers.<List<Project>>is(testList));
@@ -68,10 +69,10 @@ public class ProjectRepoTest {
 	@Test
 	public void whenGetMaxId_thenReturnMaxId() {
 		
-		Project test1 = new Project(10l, 2l, "test1", "desc1", "active"); 
-		Project test2 = new Project(11l, 2l, "test2", "desc2", "active"); 
+		Project test1 = new Project(910l, 2l, "test1", "desc1", "active");
+		Project test2 = new Project(911l, 2l, "test2", "desc2", "active");
 		Project test3Max = new Project(999l, 2l, "test3", "desc3", "passive"); 
-		Project test4 = new Project(13l, 2l, "test4", "desc4", "pending"); 
+		Project test4 = new Project(913l, 2l, "test4", "desc4", "pending");
 		
 		entityManager.persist(test1);
 		entityManager.persist(test2);
@@ -87,7 +88,7 @@ public class ProjectRepoTest {
 	
 	@Test
 	public void whenFindByProjectName_thenReturnProject() {
-		Project test = new Project(20l, 3l, "aCoolProjectName", "desc", "active");
+		Project test = new Project(920l, 3l, "aCoolProjectName", "desc", "active");
 		
 		entityManager.persist(test);
 		entityManager.flush();
